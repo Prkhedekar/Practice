@@ -1,0 +1,66 @@
+SQL Query
+
+CREATE TABLE Table1 (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  PRODUCT varchar(50) NULL,
+  PRICE varchar(10) NULL,
+PRIMARY KEY(ID)
+)
+
+CREATE TABLE Table2(
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  PRODUCT varchar(50) NULL,
+  PRICE varchar(10) NULL,
+PRIMARY KEY(ID)
+)
+
+
+
+Java Code
+
+import java.sql.*;
+
+public class Transaction_Example
+{
+	   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+	   static final String dburl = "jdbc:mysql://localhost/STOREDB";	   
+	   static final String dbuser = "root";
+	   static final String dbpass = "root";
+	   
+public static void main(String[] args)
+{
+	Connection con = null;
+	Statement stmt = null;
+	
+	try 
+	{
+	    //Step 1 : Connecting to server and database
+	    con = DriverManager.getConnection(dburl, dbuser, dbpass);
+	    con.setAutoCommit(false);
+	    //Step 2 : Initialize Statement
+	    stmt=con.createStatement();
+	    //Step 3 : SQL Query
+	    String query1="INSERT INTO Table1(PRODUCT,PRICE) VALUES('Laptop','29000')";
+	    String query2="INSERT INTO Table2(PRODUCT,PRICE) VALUES('Mouse','305')";
+	    
+	    stmt.executeUpdate(query1);
+	    stmt.executeUpdate(query2);
+	    //If you run this program without con.commit you will notice that there is no insert in table1 and table2
+	    con.commit();
+	    System.out.println("Row Inserted");
+	    
+	} 
+	
+	catch (SQLException e) 
+	{
+	    System.err.println("Cannot connect ! ");
+	    e.printStackTrace();
+	}
+	
+	finally {
+	    System.out.println("Closing the connection.");
+	    if (con != null) try { con.close(); } catch (SQLException ignore) {}
+	}
+	
+}
+}
